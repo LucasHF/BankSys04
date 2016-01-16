@@ -1,0 +1,9 @@
+language:
+  java
+jdk:
+  openjdk7
+notifications:
+  email:
+    recipients:
+      - barbosatalles9@gmail.com
+    on_sucess: always
