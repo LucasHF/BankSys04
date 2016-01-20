@@ -15,15 +15,58 @@ import banksys.persistence.AccountVector;
 public class ATM24H {
 
 	private static Scanner scanner = new Scanner(System.in);
+	
 
-	public static void main(String[] args) {
-		BankController bank = new BankController(new AccountVector());
-		AccountController accountControl = new AccountController(bank.getRepository());
-		boolean loop = true;
-		while (loop) {
-			switch (mainMenu()) {
-			case 1:
-				AbstractAccount account = null;
+	// cria um terminal 24h para atenter os clientes
+	static ATM24H atm24h = new ATM24H();
+	
+	private static int mainMenu() {
+		System.out.println("================================");
+		System.out.println("Wellcome to the Our Bank");
+		System.out.println("Automated Teller Machine");
+		System.out.println("================================");
+		System.out.println(" [1] Add New OrdinaryAccount");
+		System.out.println(" [2] Do Credit");
+		System.out.println(" [3] Do Debit");
+		System.out.println(" [4] Do Transfer");
+		System.out.println(" [5] Show Balance");
+		System.out.println(" [6] Remove OrdinaryAccount");
+		System.out.println(" [7] Earn Iterest");
+		System.out.println(" [8] Earn Bonus");
+		System.out.println(" [9] Exit");
+		System.out.println("================================");
+		System.out.println("Enter the desired option: ");
+		return scanner.nextInt();
+
+	}
+
+	private static int addAccountMenu() {
+		System.out.println("================================");
+		System.out.println("Add New OrdinaryAccount");
+		System.out.println("================================");
+		System.out.println(" [1] Ordinary");
+		System.out.println(" [2] Special");
+		System.out.println(" [3] Savings");
+		System.out.println(" [4] Tax");
+		System.out.println("================================");
+		System.out.println("Enter the desired option: ");
+		return scanner.nextInt();
+	}
+	
+	public static boolean verifica_existencia_da_conta(AbstractAccount account){
+		boolean verificador;
+		if (account != null) {
+			verificador= true; 
+		}else 
+			verificador = false;
+		return verificador ;
+		
+	}
+	
+	public static AbstractAccount menu_addAccount(AbstractAccount account){
+		
+		//int addAccountMenu = addAccountMenu();
+		
 				switch (addAccountMenu()) {
 				case 1:
 					System.out.println("Enter the ordinary account number: ");
@@ -46,22 +89,40 @@ public class ATM24H {
 					System.out.println("Invalid option!!!!");
 					break;
 				}
-
-				if (account != null) {
-					try {
-						bank.addAccount(account);
-						System.out.println("Operation was successful!");
-					} catch (BankTransactionException bte) {
-						System.out.println("Error: " + bte.getMessage());
-					}
-				}
-
+				
+				return	account;
+	}
+	
+	
+	
+	
+	
+	public static void main(String[] args) {
+		BankController bank = new BankController(new AccountVector());
+		AccountController accountControl = new AccountController(bank.getRepository());
+		boolean loop = true;
+		
+		while (loop) {
+			switch (mainMenu()) {
+			case 1:
+				
+				AbstractAccount account = null;
+				account = menu_addAccount(account);
+				
+				if (verifica_existencia_da_conta(account));
+				try {
+					bank.addAccount(account);
+					System.out.println("Operation was successful!");
+				} catch (BankTransactionException bte) {
+					System.out.println("Error: " + bte.getMessage());
+			}
 				break;
 			case 2:
 				System.out.println("Enter the account number: ");
 				String number = scanner.next();
 				System.out.println("Enter the amount to be credited: ");
 				double amount = scanner.nextDouble();
+				
 				try {
 					accountControl.doCredit(number, amount);
 					System.out.println("Operation was successful!");
@@ -152,37 +213,5 @@ public class ATM24H {
 		}
 	}
 
-	private static int mainMenu() {
-		System.out.println("================================");
-		System.out.println("Wellcome to the Our Bank");
-		System.out.println("Automated Teller Machine");
-		System.out.println("================================");
-		System.out.println(" [1] Add New OrdinaryAccount");
-		System.out.println(" [2] Do Credit");
-		System.out.println(" [3] Do Debit");
-		System.out.println(" [4] Do Transfer");
-		System.out.println(" [5] Show Balance");
-		System.out.println(" [6] Remove OrdinaryAccount");
-		System.out.println(" [7] Earn Iterest");
-		System.out.println(" [8] Earn Bonus");
-		System.out.println(" [9] Exit");
-		System.out.println("================================");
-		System.out.println("Enter the desired option: ");
-		return scanner.nextInt();
-
-	}
-
-	private static int addAccountMenu() {
-		System.out.println("================================");
-		System.out.println("Add New OrdinaryAccount");
-		System.out.println("================================");
-		System.out.println(" [1] Ordinary");
-		System.out.println(" [2] Special");
-		System.out.println(" [3] Savings");
-		System.out.println(" [4] Tax");
-		System.out.println("================================");
-		System.out.println("Enter the desired option: ");
-		return scanner.nextInt();
-	}
 
 }
