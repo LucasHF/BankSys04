@@ -19,13 +19,19 @@ public class AccountController{
 		this.repository = repository;
 	}
 
-	public void doCredit(String number, double amount) throws BankTransactionException {
-		
+	public AbstractAccount associateAccount(String number) throws BankTransactionException{
 		try {
-			account = this.repository.retrieve(number);
+			return this.repository.retrieve(number);
 		} catch (AccountNotFoundException anfe) {
 			throw new BankTransactionException(anfe);
 		}
+		
+	}
+	
+	public void doCredit(String number, double amount) throws BankTransactionException {
+		
+			account = associateAccount(number);	
+			
 		try {
 			account.credit(amount);
 		} catch (NegativeAmountException nae) {
@@ -36,11 +42,8 @@ public class AccountController{
 
 	public void doDebit(String number, double amount) throws BankTransactionException {
 		
-		try {
-			account = this.repository.retrieve(number);
-		} catch (AccountNotFoundException anfe) {
-			throw new BankTransactionException(anfe);
-		}
+		account = associateAccount(number);	
+		
 		try {
 			account.debit(amount);
 		} catch (InsufficientFundsException ife) {
@@ -52,29 +55,17 @@ public class AccountController{
 
 	public double getBalance(String number) throws BankTransactionException {
 		
-		try {
-			account = this.repository.retrieve(number);
-			return account.getBalance();
-		} catch (AccountNotFoundException anfe) {
-			throw new BankTransactionException(anfe);
-		}
-
+		account = associateAccount(number);	
+		return account.getBalance();
+		
 	}
 
 	public void doTransfer(String fromNumber, String toNumber, double amount) throws BankTransactionException {
 		AbstractAccount fromAccount;
-		try {
-			fromAccount = this.repository.retrieve(fromNumber);
-		} catch (AccountNotFoundException anfe) {
-			throw new BankTransactionException(anfe);
-		}
+		fromAccount = associateAccount(fromNumber);	
 
 		AbstractAccount toAccount;
-		try {
-			toAccount = this.repository.retrieve(toNumber);
-		} catch (AccountNotFoundException anfe) {
-			throw new BankTransactionException(anfe);
-		}
+			toAccount = associateAccount(toNumber);	;
 
 		try {
 			fromAccount.debit(amount);
@@ -88,12 +79,8 @@ public class AccountController{
 
 	public void doEarnInterest(String number) throws BankTransactionException, IncompatibleAccountException {
 		
-		try {
-			account = this.repository.retrieve(number);
-		} catch (AccountNotFoundException anfe) {
-			throw new BankTransactionException(anfe);
-		}
-
+		account = associateAccount(number);	
+		
 		if (account instanceof SavingsAccount) {
 			((SavingsAccount) account).earnInterest();
 		} else {
@@ -103,11 +90,7 @@ public class AccountController{
 
 	public void doEarnBonus(String number) throws BankTransactionException, IncompatibleAccountException {
 		
-		try {
-			account = this.repository.retrieve(number);
-		} catch (AccountNotFoundException anfe) {
-			throw new BankTransactionException(anfe);
-		}
+		account = associateAccount(number);	
 
 		if (account instanceof SpecialAccount) {
 			((SpecialAccount) account).earnBonus();
