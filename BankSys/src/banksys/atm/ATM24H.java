@@ -16,16 +16,11 @@ public class ATM24H {
 
 	private static Scanner scanner = new Scanner(System.in);
 	
-	
 	static BankController bank = new BankController(new AccountVector());
 	static AccountController accountControl = new AccountController(bank.getRepository());
-
-	 // cria um terminal 24h para atenter os clientes
 	static ATM24H atm24h = new ATM24H();
 	
-	
-	
-	private static int mainMenu() {
+	private int mainMenu() {
 		System.out.println("================================");
 		System.out.println("Wellcome to the Our Bank");
 		System.out.println("Automated Teller Machine");
@@ -45,7 +40,7 @@ public class ATM24H {
 
 	}
 
-	private static int addAccountMenu() {
+	private int addAccountMenu() {
 		System.out.println("================================");
 		System.out.println("Add New OrdinaryAccount");
 		System.out.println("================================");
@@ -58,44 +53,39 @@ public class ATM24H {
 		return scanner.nextInt();
 	}
 	
-	public static boolean verifica_existencia_da_conta(AbstractAccount account){
+	public  boolean verifica_existencia_da_conta(AbstractAccount account){
 		boolean verificador;
 		if (account != null) {
 			verificador= true; 
 		}else 
 			verificador = false;
 		return verificador ;
-		
 	}
 	
-	public static AbstractAccount menu_atribuirAccount(AbstractAccount account){
-		
-		//int addAccountMenu = addAccountMenu();
-		
-				switch (addAccountMenu()) {
-				case 1:
-					System.out.println("Enter the ordinary account number: ");
-					account = new OrdinaryAccount(scanner.next());
-					break;
-				case 2:
-					System.out.println("Enter the special account number: ");
-					account = new SpecialAccount(scanner.next());
-					break;
-				case 3:
-					System.out.println("Enter the saving account number: ");
-					account = new SavingsAccount(scanner.next());
-					break;
-				case 4:
-					System.out.println("Enter the tax account number: ");
-					account = new TaxAccount(scanner.next());
-					break;
+	public AbstractAccount menu_atribuirAccount(AbstractAccount account){
+		switch (atm24h.addAccountMenu()) {
+			case 1:
+				System.out.println("Enter the ordinary account number: ");
+				account = new OrdinaryAccount(scanner.next());
+				break;
+			case 2:
+				System.out.println("Enter the special account number: ");
+				account = new SpecialAccount(scanner.next());
+				break;
+			case 3:
+				System.out.println("Enter the saving account number: ");
+				account = new SavingsAccount(scanner.next());
+				break;
+			case 4:
+				System.out.println("Enter the tax account number: ");
+				account = new TaxAccount(scanner.next());
+				break;
 
-				default:
-					System.out.println("Invalid option!!!!");
-					break;
-				}
-				
-				return	account;
+			default:
+				System.out.println("Invalid option!!!!");
+				break;
+			}
+		return	account;
 	}
 	
 	public void menu_Credit( String number, double amount){
@@ -105,7 +95,6 @@ public class ATM24H {
 		} catch (BankTransactionException bte) {
 			System.out.println("Error: " + bte.getMessage());
 		}
-	
 	}
 	
 	public  void menu_Debit(String number, double amount){
@@ -114,7 +103,7 @@ public class ATM24H {
 			System.out.println("Operation was successful!");
 		} catch (BankTransactionException bte) {
 			System.out.println("Error: " + bte.getMessage());
-				}
+		}
 	}
 	
 	public void menu_transfer(String fromNumber, String toNumber, double amount){
@@ -124,9 +113,7 @@ public class ATM24H {
 		} catch (BankTransactionException bte) {
 			System.out.println("Error: " + bte.getMessage());
 		}
-
 	}
-	
 	
 	public void menu_addAccount (AbstractAccount account){
 		try {
@@ -137,7 +124,6 @@ public class ATM24H {
 		}
 	}
 	
-	
 	public void menu_remove(String number ){
 		try {
 			bank.removeAccount(number);
@@ -147,7 +133,6 @@ public class ATM24H {
 		}
 	}
 	
-	
 	public void menu_EarnInterest(String number){
 		try {
 			accountControl.doEarnInterest(number);
@@ -155,7 +140,6 @@ public class ATM24H {
 		} catch (BankTransactionException bte) {
 			System.out.println("Error: " + bte.getMessage());
 		}
-	
 	}
 	
 	public void menu_EarnBonus (String number){
@@ -176,42 +160,30 @@ public class ATM24H {
 		}
 	}	
 	
-	
 	public static void main(String[] args) {
-		
 		boolean loop = true;
-		
 		while (loop) {
-			switch (mainMenu()) {
+			switch (atm24h.mainMenu()) {
 			case 1:
-				
 				AbstractAccount account = null;
-				account = menu_atribuirAccount(account);
-				if (verifica_existencia_da_conta(account));
+				account = atm24h.menu_atribuirAccount(account);
+				if (atm24h.verifica_existencia_da_conta(account));
 					atm24h.menu_addAccount(account);
-				
 				break;
-				
 			case 2:
 				System.out.println("Enter the account number: ");
 				String number = scanner.next();
 				System.out.println("Enter the amount to be credited: ");
 				double amount = scanner.nextDouble();
-				
 				atm24h.menu_Credit(number, amount);
-
-				break;
-				
+				break;		
 			case 3:
 				System.out.println("Enter the account number: ");
 				number = scanner.next();
 				System.out.println("Enter the amount to be debited: ");
 				amount = scanner.nextDouble();
-				
 				atm24h.menu_Debit(number, amount);
-
 				break;
-				
 			case 4:
 				System.out.println("Enter the origin account number: ");
 				String fromNumber = scanner.next();
@@ -219,52 +191,35 @@ public class ATM24H {
 				String toNumber = scanner.next();
 				System.out.println("Enter the amount to be transferred: ");
 				amount = scanner.nextDouble();
-
 				atm24h.menu_transfer(fromNumber, toNumber, amount);
-				
 				break;
-				
 			case 5:
 				System.out.println("Enter the account number: ");
 				number = scanner.next();
-				
 				atm24h.menu_showBalance(number);
-				
 				break;
 			case 6:
 				System.out.println("Enter the account number: ");
 				number = scanner.next();
-				
 				atm24h.menu_remove(number);
-				
 				break;
-				
 			case 7:
 				System.out.println("Enter the account number: ");
 				number = scanner.next();
-				
 				atm24h.menu_EarnInterest(number);
-				
 				break;
-				
 			case 8:
 				System.out.println("Enter the account number: ");
 				number = scanner.next();
-				
 				atm24h.menu_EarnBonus(number);
-				
 				break;
-
 			case 9:
 				System.out.print("Goodbye and have a nice day!!!");
 				loop = false;
 				break;
-
 			default:
 				break;
 			}
 		}
 	}
-
-
 }
