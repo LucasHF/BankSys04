@@ -16,9 +16,14 @@ public class ATM24H {
 
 	private static Scanner scanner = new Scanner(System.in);
 	
+	
+	static BankController bank = new BankController(new AccountVector());
+	static AccountController accountControl = new AccountController(bank.getRepository());
 
-	// cria um terminal 24h para atenter os clientes
+	 // cria um terminal 24h para atenter os clientes
 	static ATM24H atm24h = new ATM24H();
+	
+	
 	
 	private static int mainMenu() {
 		System.out.println("================================");
@@ -63,7 +68,7 @@ public class ATM24H {
 		
 	}
 	
-	public static AbstractAccount menu_addAccount(AbstractAccount account){
+	public static AbstractAccount menu_atribuirAccount(AbstractAccount account){
 		
 		//int addAccountMenu = addAccountMenu();
 		
@@ -93,13 +98,87 @@ public class ATM24H {
 				return	account;
 	}
 	
+	public void menu_Credit( String number, double amount){
+		try {
+			accountControl.doCredit(number,amount);
+			System.out.println("Operation was successful!");
+		} catch (BankTransactionException bte) {
+			System.out.println("Error: " + bte.getMessage());
+		}
+	
+	}
+	
+	public  void menu_Debit(String number, double amount){
+		try {
+			accountControl.doDebit(number, amount);
+			System.out.println("Operation was successful!");
+		} catch (BankTransactionException bte) {
+			System.out.println("Error: " + bte.getMessage());
+				}
+	}
+	
+	public void menu_transfer(String fromNumber, String toNumber, double amount){
+		try {
+			accountControl.doTransfer(fromNumber, toNumber, amount);
+			System.out.println("Operation was successful!");
+		} catch (BankTransactionException bte) {
+			System.out.println("Error: " + bte.getMessage());
+		}
+
+	}
 	
 	
+	public void menu_addAccount (AbstractAccount account){
+		try {
+			bank.addAccount(account);
+			System.out.println("Operation was successful!");
+		} catch (BankTransactionException bte) {
+			System.out.println("Error: " + bte.getMessage());
+		}
+	}
+	
+	
+	public void menu_remove(String number ){
+		try {
+			bank.removeAccount(number);
+			System.out.println("Operation was successful!");
+		}catch (BankTransactionException bte) {
+			System.out.println("Error: " + bte.getMessage());
+		}
+	}
+	
+	
+	public void menu_EarnInterest(String number){
+		try {
+			accountControl.doEarnInterest(number);
+			System.out.println("Operation was successful!");
+		} catch (BankTransactionException bte) {
+			System.out.println("Error: " + bte.getMessage());
+		}
+	
+	}
+	
+	public void menu_EarnBonus (String number){
+		try {
+			accountControl.doEarnBonus(number);
+			System.out.println("Operation was successful!");
+		} catch (BankTransactionException bte) {
+			System.out.println("Error: " + bte.getMessage());
+		}
+	}
+	
+	public void menu_showBalance(String number){
+		try {
+			System.out.println("OrdinaryAccount number: " + number);
+			System.out.println("Balance: " + accountControl.getBalance(number));
+		} catch (BankTransactionException bte) {
+			System.out.println("Error: " + bte.getMessage());
+		}
+	}	
 	
 	
 	public static void main(String[] args) {
-		BankController bank = new BankController(new AccountVector());
-		AccountController accountControl = new AccountController(bank.getRepository());
+		
 		boolean loop = true;
 		
 		while (loop) {
@@ -107,43 +186,32 @@ public class ATM24H {
 			case 1:
 				
 				AbstractAccount account = null;
-				account = menu_addAccount(account);
-				
+				account = menu_atribuirAccount(account);
 				if (verifica_existencia_da_conta(account));
-				try {
-					bank.addAccount(account);
-					System.out.println("Operation was successful!");
-				} catch (BankTransactionException bte) {
-					System.out.println("Error: " + bte.getMessage());
-			}
+					atm24h.menu_addAccount(account);
+				
 				break;
+				
 			case 2:
 				System.out.println("Enter the account number: ");
 				String number = scanner.next();
 				System.out.println("Enter the amount to be credited: ");
 				double amount = scanner.nextDouble();
 				
-				try {
-					accountControl.doCredit(number, amount);
-					System.out.println("Operation was successful!");
-				} catch (BankTransactionException bte) {
-					System.out.println("Error: " + bte.getMessage());
-				}
+				atm24h.menu_Credit(number, amount);
 
 				break;
+				
 			case 3:
 				System.out.println("Enter the account number: ");
 				number = scanner.next();
 				System.out.println("Enter the amount to be debited: ");
 				amount = scanner.nextDouble();
-				try {
-					accountControl.doDebit(number, amount);
-					System.out.println("Operation was successful!");
-				} catch (BankTransactionException bte) {
-					System.out.println("Error: " + bte.getMessage());
-				}
+				
+				atm24h.menu_Debit(number, amount);
 
 				break;
+				
 			case 4:
 				System.out.println("Enter the origin account number: ");
 				String fromNumber = scanner.next();
@@ -152,54 +220,39 @@ public class ATM24H {
 				System.out.println("Enter the amount to be transferred: ");
 				amount = scanner.nextDouble();
 
-				try {
-					accountControl.doTransfer(fromNumber, toNumber, amount);
-					System.out.println("Operation was successful!");
-				} catch (BankTransactionException bte) {
-					System.out.println("Error: " + bte.getMessage());
-				}
-
+				atm24h.menu_transfer(fromNumber, toNumber, amount);
+				
 				break;
+				
 			case 5:
 				System.out.println("Enter the account number: ");
 				number = scanner.next();
-				try {
-					System.out.println("OrdinaryAccount number: " + number);
-					System.out.println("Balance: " + accountControl.getBalance(number));
-				} catch (BankTransactionException bte) {
-					System.out.println("Error: " + bte.getMessage());
-				}
+				
+				atm24h.menu_showBalance(number);
+				
 				break;
 			case 6:
 				System.out.println("Enter the account number: ");
 				number = scanner.next();
-				try {
-					bank.removeAccount(number);
-					System.out.println("Operation was successful!");
-				} catch (BankTransactionException bte) {
-					System.out.println("Error: " + bte.getMessage());
-				}
+				
+				atm24h.menu_remove(number);
+				
 				break;
+				
 			case 7:
 				System.out.println("Enter the account number: ");
 				number = scanner.next();
-				try {
-					accountControl.doEarnInterest(number);
-					System.out.println("Operation was successful!");
-				} catch (BankTransactionException bte) {
-					System.out.println("Error: " + bte.getMessage());
-				}
-
+				
+				atm24h.menu_EarnInterest(number);
+				
 				break;
+				
 			case 8:
 				System.out.println("Enter the account number: ");
 				number = scanner.next();
-				try {
-					accountControl.doEarnBonus(number);
-					System.out.println("Operation was successful!");
-				} catch (BankTransactionException bte) {
-					System.out.println("Error: " + bte.getMessage());
-				}
+				
+				atm24h.menu_EarnBonus(number);
+				
 				break;
 
 			case 9:
