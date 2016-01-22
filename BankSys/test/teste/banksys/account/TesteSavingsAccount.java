@@ -22,12 +22,10 @@ public class TesteSavingsAccount {
 	public void tearDown() throws Exception {
 	}
 
-	@Test  // ta dependedo do teste do metedo cretidat
+	@Test 
 	public void testeearnInterest() throws NegativeAmountException {
 		conta.credit(100);
 		conta.earnInterest();
-		
-		// verificar se saldo atual da conta esta certo depois de chamar earnInterest() 
 		assertEquals(conta.getBalance(),(100 * 0.001),0);
 		
 	}
