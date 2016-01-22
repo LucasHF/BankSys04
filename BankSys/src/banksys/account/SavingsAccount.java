@@ -3,9 +3,6 @@ package banksys.account;
 import banksys.account.exception.NegativeAmountException;
 
 public class SavingsAccount extends OrdinaryAccount {
-	
-	
-
 	public SavingsAccount(String number) {
 		super(number);
 	}

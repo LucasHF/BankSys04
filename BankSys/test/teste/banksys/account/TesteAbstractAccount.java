@@ -14,7 +14,7 @@ public class TesteAbstractAccount {
 	@Test
 	public void test_credit() throws NegativeAmountException {
 		conta.credit(100);
-		assertEquals(100,conta.getBalance(),0);
+		assertEquals(conta.getBalance(), 100,0);
 	}
 	
 	@Test (expected = NegativeAmountException.class )

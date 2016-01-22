@@ -26,8 +26,8 @@ public class TesteSavingsAccount {
 	public void testeearnInterest() throws NegativeAmountException {
 		conta.credit(100);
 		conta.earnInterest();
-		assertEquals(conta.getBalance(),(100 * 0.001),0);
-		
+		assertEquals(conta.getBalance(),100.1,0);
+			
 	}
 
 }
