@@ -7,7 +7,7 @@ import banksys.account.AbstractAccount;
 import banksys.account.OrdinaryAccount;
 import banksys.account.exception.NegativeAmountException;
 
-public class TesteAbstractAccount {
+public class TestAbstractAccount {
 	
 	AbstractAccount conta = new OrdinaryAccount("123");
 
